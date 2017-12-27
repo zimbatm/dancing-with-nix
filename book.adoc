@@ -3,7 +3,7 @@ zimbatm <zimbatm@zimbatm.com>
 v0.1.0, 2018-01-01
 :doctype: book
 :toc: left
-:source-highlighter: coderay
+:source-highlighter: highlightjs
 :imagesdir: images
 :copyright: CC-BY-SA 4.0
 :front-cover-image: image:cover.png[Front Cover,1050,1600]
