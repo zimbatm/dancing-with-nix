@@ -1,0 +1,59 @@
+## The Language
+
+Nix, just like Make, has it's own syntax to describe builds.
+
+It's called the "Nix Expression" language.
+
+### Syntax
+
+Nix has JSON-like data structures:
+
+An "attribute set" or "attrset" or "set" which is pretty much like a
+JSON object:
+
+[source,nix]
+----
+{
+  myKey = "my-value";
+}
+----
+
+A list:
+
+[source,nix]
+----
+[ 1 2 3 ]
+----
+
+Notice the lack of commas in the list. It takes a bit of time to get
+used to it but is something that I have come to miss in other
+languages.
+
+Some data types:
+
+[source,nix]
+----
+{
+  # I am a comment
+  /* and a multi-line
+  comment */
+  aNumber = 1;
+  aFloat = 1.2;
+  aString = "hi, I am a string";
+  aMultiLineString = ''
+    unlike HEREDOC
+    the string is automatically
+    de-indented
+  '';
+  booleans = [ true false ];
+  andNull = null;
+}
+----
+
+And finally there is the function:
+
+[source,nix]
+----
+arg1: arg1 + arg1
+----
+

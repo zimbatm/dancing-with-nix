@@ -1,0 +1,8 @@
+== Glossary
+
+Derivation:: A derivation is a definition of what should be built.
+It translates into a .drv file in the /nix/store when running
+`nix-instantiate` on it.
+
+Derivation output:: A derivation output is the result of `nix-store
+--realize` on a .drv file.

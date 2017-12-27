@@ -11,3 +11,7 @@ v0.1.0, 2018-01-01
 include::chapters/preface.adoc[]
 
 include::chapters/intro.adoc[]
+
+include::chapters/the-language.adoc[]
+
+include::chapters/glossary.adoc[]
