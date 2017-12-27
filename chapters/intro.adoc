@@ -1,0 +1,9 @@
+=== Intro
+
+=== What is Nix?
+
+Nix is at heart a build system, like Make, Maven, Grunt, ...
+
+One essential property is that it's easily composable. It's possible
+to grow the build system from a single package to thousands, to
+building a whole Linux operating system.

@@ -1,0 +1,14 @@
+== Dancing with Nix (Book)
+
+include::chapters/preface.adoc[]
+
+=== How to build
+
+Download this repo. Run `nix-shell --run rake`. Wait.
+
+The output will be in the newly-created `build/` folder
+
+=== License
+
+This work is licensed under the
+https://creativecommons.org/licenses/by/4.0/[CC-BY-SA 4.0 license].

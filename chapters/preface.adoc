@@ -1,0 +1,12 @@
+== Preface
+
+NOTE: this is a work in progress
+
+There is a joy of being in the moment and able to move in sync with
+the tune. Even a simple dance will do, as long as it's fluid and the
+music is good.
+
+Nix is a composable build system, a tool. This book's intention is
+to teach you the steps to be confortable with Nix and it's
+ecosystem. Become fluid with it and have fun!
+

@@ -1,0 +1,13 @@
+= Dancing with Nix
+zimbatm <zimbatm@zimbatm.com>
+v0.1.0, 2018-01-01
+:doctype: book
+:toc: left
+:source-highlighter: coderay
+:imagesdir: images
+:copyright: CC-BY-SA 4.0
+:front-cover-image: image:cover.png[Front Cover,1050,1600]
+
+include::chapters/preface.adoc[]
+
+include::chapters/intro.adoc[]
