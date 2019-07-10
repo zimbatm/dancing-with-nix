@@ -57,3 +57,7 @@ And finally there is the function:
 arg1: arg1 + arg1
 ----
 
+### Exercises
+
+Start a REPL with `nix-shell -p nix-repl --run nix-repl` and play around.
+
