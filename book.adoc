@@ -12,6 +12,8 @@ include::chapters/preface.adoc[]
 
 include::chapters/intro.adoc[]
 
-include::chapters/the-language.adoc[]
+include::chapters/reading-nix-code.adoc[]
+
+include::chapters/nix-for-projects.adoc[]
 
 include::chapters/glossary.adoc[]

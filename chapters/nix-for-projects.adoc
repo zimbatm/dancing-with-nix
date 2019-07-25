@@ -1,0 +1,148 @@
+## Nix for projects
+
+One advantage of Nix is that it allows to precisely pin all the software
+dependencies and make sure that all the developers have access to the same
+environment for building and debugging the project.
+
+In this chapter we will discuss the various ways that Nix can be used to
+achieve that goal.
+
+### Getting started
+
+The first thing to do when converting a project to nix is to add a `shell.nix`
+file in the top-level. The file looks something like this:
+
+[source,nix]
+----
+{ pkgs ? import <nixpkgs> {} }: <1>
+pkgs.mkShell {
+  buildInputs = [
+    pkgs.ruby <2>
+  ];
+}
+----
+<1>: the file is a function that takes pkgs as a default argument
+<2>: add your project dependencies here
+
+Running `nix-shell` in the project root will now allow to bring in the
+development dependencies by starting a sub-shell.
+
+To find the name of the packages, use `nix search <term>` and it will give an
+output like this:
+
+----
+<snip>
+* nixpkgs.ruby (ruby)
+  The Ruby language
+
+* nixpkgs.ruby-zoom (ruby-zoom)
+  Quickly open CLI search results in your favorite editor!
+
+* nixpkgs.ruby_2_3 (ruby)
+  The Ruby language
+
+* nixpkgs.ruby_2_4 (ruby)
+  The Ruby language
+
+* nixpkgs.ruby_2_5 (ruby)
+  The Ruby language
+
+* nixpkgs.ruby_2_6 (ruby)
+  The Ruby language
+<snip>
+----
+
+TODO:: talk about shellHook and inputsFrom
+
+TODO:: talk about the difference between pkgs.mkShell and pkgs.stdenv.mkDerivation
+
+### Pinning nixpkgs
+
+In the previous example, `<nixpkgs>` comes from the NIX_PATH environment
+(which maps to a nix-channel by default). So each user might be using a
+different version of nixpkgs, with different version of the dependencies.
+
+Pretty soon you will want to control exactly what version of nixpkgs is being
+used for the project.
+
+At this point I recommend introducing a `nix/` folder in the project root to
+avoid polluting the hierarchy too much.
+
+Add a `nix/nixpkgs.nix` file with some content like this:
+
+[source,nix]
+----
+{ system ? builtins.currentSystem }:
+let
+  nixpkgs = builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs-channels/archive/ae71c13a92f7e3b7968e8b7b1db9f6238dc00a25.tar.gz";
+    sha256 = "0khm8khgyfhmnnmm7wjs5mh2cfvk124drflwswn9q341bkc4bqnw";
+  };
+in
+  import nixpkgs {
+    inherit system;
+    config = {}; # prevent nixpkgs from loading user configuration
+    overlays = []; # prevent nixpkgs from loading the user overlays
+  }
+----
+
+TODO:: Explain how I found out the URL and the sha256
+
+TODO:: There are some implications with Hydra and builtin fetchers
+
+With that in place, change the `shell.nix` file to import that file instead.
+
+[source,diff]
+----
+1c1
+< { pkgs ? import <nixpkgs> {} }:
+---
+> { pkgs ? import ./nix/nixpkgs.nix {} }:
+----
+
+That's it, all the project dependencies are now fully pinned!
+
+NOTE:: https://github.com/nmattia/niv[niv] is a handy tool that makes it easy to pin and update dependencies.
+
+TODO:: talk about what channels to use for development in what cases
+
+## Mixing nixpkgs with other sources
+
+At some point it will probably happen that the project needs nixpkgs, plus
+some tiny fixes, or some additional software. At this point it's a good time
+to introduce the nixpkgs overlays.
+
+Add a `nix/overlay.nix` with content:
+
+[source,nix]
+----
+self: pkgs: {
+  # adding a new foo package
+  foo = pkgs.callPackage ./pkgs/foo {};
+
+  # fix an existing package
+  hello = pkgs.hello.overrideAttrs(x: {
+    doCheck = false;
+  });
+}
+----
+
+And then change the `nix/nixpkgs.nix` file:
+
+[source,diff]
+----
+11c11
+<     overlays = []; # prevent nixpkgs from loading the user overlays
+---
+>     overlays = [ (import ./overlay.nix) ]; # set our own overlay
+----
+
+Now if nixpkgs.hello is added to the `shell.nix` file and `nix-shell` is
+restarted, you should see nixpkgs.hello rebuilding.
+
+
+### TODO
+
+* introduce a default.nix
+* what is the difference between default.nix, shell.nix and release.nix?
+* project CI setup

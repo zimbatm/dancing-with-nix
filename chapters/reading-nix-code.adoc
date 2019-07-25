@@ -1,0 +1,119 @@
+## The Language
+
+At this point you might have looked at some nix code and be like; what is all
+this soup of characters? The goal of this chapter is to allow you to read code
+and understand what it does.
+
+NOTE: the nix language is called "Nix Expression language"
+
+The language has been purposefully created to accomplish one goal; allow to
+build things declaratively. In that regard you might be a bit surprised when
+it doesn't do all of the things you are used to from other language. Over time
+you will hopefully appreciate the trade offs that have been made, like I do.
+But for now, let's dig into the syntax.
+
+### Syntax
+
+You can think of Nix as a JSON-like language, with functions.
+
+Here is how all the JSON types are being represented:
+
+[source,nix]
+----
+{
+  aString = "my-value";
+
+  aMultiLineString = ''
+    some
+    content
+  '';
+
+  aNumber = 42;
+
+  booleans = [ true false ];
+
+  theNullValue = null;
+  
+  aList = [ 1 2 3 4 ];
+
+  anObjectLike.withSomeAttribute = 4;
+}
+----
+
+Converting it to JSON:
+
+`$ nix-instantiate --eval --json --strict chapters/example.nix | jq .`
+[source,json]
+----
+{
+  "aList": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "aMultiLineString": "some\ncontent\n",
+  "aNumber": 42,
+  "aString": "my-value",
+  "anObjectLike": {
+    "withSomeAttribute": 4
+  },
+  "booleans": [
+    true,
+    false
+  ],
+  "theNullValue": null
+}
+----
+
+Let's pause there and notice a few things:
+
+The JSON keys have been sorted alphabetically. Nix does that to always produce
+a stable build recipe.
+
+The list elements are not separated by commas. This is quite unusual for a
+language.
+
+The multiline string has removed the indent for us. This is quite nice to
+allow to indent the code without impacting the content.
+
+The anObjectLike.withSomeAttribute has been expanded automatically for us.
+This makes it convenient to create deeply-nested objects with few values. The
+value of that is going to become more apparent later.
+
+TODO: continue here
+
+
+
+Some data types:
+
+[source,nix]
+----
+{
+  # I am a comment
+  /* and a multi-line
+  comment */
+  aNumber = 1;
+  aFloat = 1.2;
+  aString = "hi, I am a string";
+  aMultiLineString = ''
+    unlike HEREDOC
+    the string is automatically
+    de-indented
+  '';
+  booleans = [ true false ];
+  andNull = null;
+}
+----
+
+And finally there is the function:
+
+[source,nix]
+----
+arg1: arg1 + arg1
+----
+
+### Exercises
+
+Start a REPL with `nix-shell -p nix-repl --run nix-repl` and play around.
+

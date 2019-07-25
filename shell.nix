@@ -1,6 +1,5 @@
 { pkgs ? import <nixpkgs> {} }:
-pkgs.stdenv.mkDerivation {
-  name = "env";
+pkgs.mkShell {
   buildInputs = [
     pkgs.bundler
     pkgs.bundix
