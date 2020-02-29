@@ -10,4 +10,4 @@ gem 'asciidoctor-pdf', '~> 1.5.0.beta.1'
 gem 'coderay', '~> 1.1.2'
 
 # Rake
-gem 'rake', '~> 12.3.2'
+gem 'rake', '~> 12.3.3'
